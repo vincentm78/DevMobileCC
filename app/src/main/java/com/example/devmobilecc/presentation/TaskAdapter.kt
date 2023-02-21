@@ -20,7 +20,7 @@ class TaskAdapter(private val data: List<Task>): RecyclerView.Adapter<TaskAdapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data.get(position)
-        holder.firstNameTextView.text = item.first_name
+        holder.taskTextView.text = item.nom
         holder.deleteButton.setOnClickListener {
             listener.deleteTask(item)
         }
@@ -31,7 +31,7 @@ class TaskAdapter(private val data: List<Task>): RecyclerView.Adapter<TaskAdapte
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val firstNameTextView: TextView = view.findViewById(R.id.edit_list_TODO)
+        val taskTextView: TextView = view.findViewById(R.id.edit_name)
         val deleteButton: ImageButton = view.findViewById(R.id.ic_close)
     }
 }
