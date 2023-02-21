@@ -7,7 +7,7 @@ import com.example.devmobilecc.domain.Repository
 class ViewModel {
 
     val repository = Repository()
-    lateinit var listener: ITaskListener
+    lateinit var listener: IRefreshListener
 
 
     fun getStoredTasks(context: Context): ArrayList<Task> {
@@ -25,15 +25,9 @@ class ViewModel {
     }
 
     fun createTask(text: String): Task {
-        val split = text.split(",")
-        if (split.size == 2) {
-            return Task(
-                nom = split[1].trim(),
-            )
-        } else if (text.trim().isNotEmpty()) {
-            return Task(
-                nom = "")
-            )
-        }
+        var task: Task
+        task = Task()
+        task.nom = text
+        return task
     }
 }
