@@ -25,8 +25,7 @@ class ViewModel {
     }
 
     fun createTask(text: String): Task {
-        var task: Task
-        task = Task()
+        var task: Task = Task()
         task.nom = text
         return task
     }
