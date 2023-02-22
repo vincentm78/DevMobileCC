@@ -23,17 +23,17 @@ class MainActivity : AppCompatActivity(), ITaskListener, IRefreshListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.listener = this
-        data = viewModel.getStoredTasks(this)
+        this.viewModel.listener = this
+        this.data = viewModel.getStoredTasks(this)
 
-        addButton = findViewById(R.id.add_button)
-        recycler = findViewById(R.id.recycler)
-        recycler.layoutManager = LinearLayoutManager(this)
-        adapter = TaskAdapter(data)
-        adapter.listener = this
-        recycler.adapter = adapter
+        this.addButton = findViewById(R.id.add_button)
+        this.recycler = findViewById(R.id.recycler)
+        this.recycler.layoutManager = LinearLayoutManager(this)
+        this.adapter = TaskAdapter(data)
+        this.adapter.listener = this
+        this.recycler.adapter = adapter
 
-        addButton.setOnClickListener {
+        this.addButton.setOnClickListener {
             //showDialog1()
             showDialog2()
         }

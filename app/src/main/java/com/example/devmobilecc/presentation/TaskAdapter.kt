@@ -19,10 +19,10 @@ class TaskAdapter(private val data: List<Task>): RecyclerView.Adapter<TaskAdapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data.get(position)
+        val item = data[position]
         holder.taskTextView.text = item.nom
         holder.deleteButton.setOnClickListener {
-            listener.deleteTask(item)
+            this.listener.deleteTask(item)
         }
     }
 
