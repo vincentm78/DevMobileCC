@@ -2,6 +2,8 @@ package com.example.devmobilecc.domain
 
 import android.content.Context
 import com.example.devmobilecc.data.Task
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 class Repository {
