@@ -11,22 +11,21 @@ class ViewModel {
 
 
     fun getStoredTasks(context: Context): ArrayList<Task> {
-        return repository.getStoredTasks(context)
+        return this.repository.getStoredTasks(context)
     }
 
     fun saveTask(context: Context, Task: Task) {
-        repository.saveTask(context, Task)
-        listener.refreshData(repository.getStoredTasks(context))
+        this.repository.saveTask(context, Task)
+        this.listener.refreshData(repository.getStoredTasks(context))
     }
 
     fun deleteTask(context: Context, Task: Task) {
-        repository.deleteTask(context, Task)
-        listener.refreshData(repository.getStoredTasks(context))
+        this.repository.deleteTask(context, Task)
+        this.listener.refreshData(repository.getStoredTasks(context))
     }
 
     fun createTask(text: String): Task {
-        var task: Task
-        task = Task()
+        var task: Task = Task()
         task.nom = text
         return task
     }
