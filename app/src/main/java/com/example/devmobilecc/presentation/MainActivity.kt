@@ -11,67 +11,65 @@ import com.example.devmobilecc.R
 import com.example.devmobilecc.data.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity(), ITaskListener, IRefreshListener {
+class MainActivity : AppCompatActivity(), ITaskListener {
     private lateinit var recycler: RecyclerView
     private lateinit var addButton: FloatingActionButton
     private lateinit var data: ArrayList<Task>
     private lateinit var adapter: TaskAdapter
-    private var viewModel = ViewModel()
+    private var viewModel: ViewModel = ViewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.viewModel.listener = this
-        this.data = viewModel.getStoredTasks(this)
-
-        this.addButton = findViewById(R.id.add_button)
-        this.recycler = findViewById(R.id.recycler)
-        this.recycler.layoutManager = LinearLayoutManager(this)
-        this.adapter = TaskAdapter(data)
-        this.adapter.listener = this
-        this.recycler.adapter = adapter
-
-        this.addButton.setOnClickListener {
-            //showDialog1()
-            showDialog2()
+        data = viewModel.getStoredTasks(this)
+        recycler = findViewById<RecyclerView>(R.id.recycler)
+        recycler.layoutManager = LinearLayoutManager(this)
+        adapter = TaskAdapter(data, this)
+        adapter.listener = this
+        recycler.adapter = adapter
+        addButton = findViewById<FloatingActionButton>(R.id.add_button)
+        addButton.setOnClickListener {
+            createTask()
         }
     }
 
-    fun showDialog2() {
-        val builder = AlertDialog.Builder(this)
-        val inflater = layoutInflater
-        val layout = inflater.inflate(R.layout.task_item_layout, null)
-        val editText: EditText = layout.findViewById(R.id.edit_name)
 
-        builder.apply {
-            setTitle("Titre")
-            setMessage("Texte")
-            setPositiveButton("Ajouter") { _, _ ->
-                try {
-                    val person = viewModel.createTask(editText.text.toString())
-                    viewModel.saveTask(this@MainActivity, person)
-                    adapter.notifyDataSetChanged()
-                } catch (e: java.lang.Exception) {
-                    Toast.makeText(this@MainActivity, "Format invalide", Toast.LENGTH_SHORT).show()
-                }
-            }
-            setNegativeButton("Annuler") { _, _ ->
-
-            }
-            setView(layout)
-            show()
-        }
-    }
-
-    override fun deleteTask(task: Task) {
-        viewModel.deleteTask(this, task)
-    }
-
-    override fun refreshData(data: List<Task>) {
+    fun refreshData(data: List<Task>) {
         this.data.clear()
         this.data.addAll(data)
         this.adapter.notifyDataSetChanged()
     }
+
+    override fun checkBox(pos: Int) {
+        data.get(pos).cocher = !data.get(pos).cocher
+    }
+
+    override fun editText(pos: Int, desc: String) {
+        data.get(pos).description = desc
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.clearPreferences(this)
+        for (k in data){
+            viewModel.storeTask(this, k)
+        }
+    }
+
+    private fun createTask() {
+        var t = Task("", false)
+        data.add(t)
+        adapter = TaskAdapter(data, this)
+        recycler.adapter = adapter
+
+    }
+
+    fun deleteTask(position: Int){
+        data.removeAt(position)
+        adapter = TaskAdapter(data, this)
+        recycler.adapter = adapter
+    }
+
 }

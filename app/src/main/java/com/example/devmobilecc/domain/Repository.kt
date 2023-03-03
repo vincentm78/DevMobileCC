@@ -7,11 +7,6 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 class Repository {
-    fun getMockTasks() : ArrayList<Task> {
-        var Tasks = ArrayList<Task>()
-        //Tasks.add(Task(first_name = "Walter", last_name = "White"))
-        return Tasks
-    }
 
     fun getStoredTasks(context: Context): ArrayList<Task> {
         val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
@@ -51,5 +46,27 @@ class Repository {
             editor.putString("Tasks", gson.toJson(Tasks))
             editor.apply()
         } catch (e: NullPointerException) { e.printStackTrace() }
+    }
+
+    fun storeTask(context: Context, task: Task){
+        val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+        val taskStr = preferences.getString("tasks", "")
+        val gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<Task?>?>(){}.type
+        var tasks = ArrayList<Task>()
+        try{
+            tasks=gson.fromJson<Any>(taskStr, type) as ArrayList<Task>
+        }catch(e: NullPointerException){e.printStackTrace()}
+        tasks.add(task)
+        editor.putString("tasks", gson.toJson(tasks))
+        editor.apply()
+
+    }
+
+    fun clearPreferences(context: Context){
+        val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val editor = preferences.edit().clear()
+        editor.commit()
     }
 }
