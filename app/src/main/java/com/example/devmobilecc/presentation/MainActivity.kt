@@ -2,16 +2,14 @@ package com.example.devmobilecc.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.devmobilecc.R
 import com.example.devmobilecc.data.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity(), ITaskListener {
+class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
     private lateinit var recycler: RecyclerView
     private lateinit var addButton: FloatingActionButton
     private lateinit var data: ArrayList<Task>
@@ -31,12 +29,13 @@ class MainActivity : AppCompatActivity(), ITaskListener {
         recycler.adapter = adapter
         addButton = findViewById<FloatingActionButton>(R.id.add_button)
         addButton.setOnClickListener {
-            createTask()
+            this.createTask()
         }
+
     }
 
 
-    fun refreshData(data: List<Task>) {
+    override fun refreshData(data: List<Task>) {
         this.data.clear()
         this.data.addAll(data)
         this.adapter.notifyDataSetChanged()
@@ -50,13 +49,28 @@ class MainActivity : AppCompatActivity(), ITaskListener {
         data.get(pos).description = desc
     }
 
+    override fun deleteTask(task: Task) {
+        viewModel.deleteTask(this, task)
+    }
+
+    /*
     override fun onStop() {
         super.onStop()
+
         viewModel.clearPreferences(this)
-        for (k in data){
-            viewModel.storeTask(this, k)
+        for (task in data){
+            viewModel.storeTask(this, task)
         }
     }
+*/
+
+    override fun onStop() {
+        super.onStop()
+
+        viewModel.clearPreferences(this)
+        viewModel.writeListinPref(this, this.data)
+    }
+
 
     private fun createTask() {
         var t = Task("", false)
@@ -66,10 +80,11 @@ class MainActivity : AppCompatActivity(), ITaskListener {
 
     }
 
+    /*
     fun deleteTask(position: Int){
         data.removeAt(position)
         adapter = TaskAdapter(data, this)
         recycler.adapter = adapter
     }
-
+     */
 }

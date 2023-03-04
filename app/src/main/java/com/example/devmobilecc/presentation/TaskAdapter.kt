@@ -26,7 +26,7 @@ class TaskAdapter(private val data: List<Task>, private val act : MainActivity):
         holder.checkBox.isChecked = item.cocher
         holder.editTask.setText(item.description)
         holder.deleteButton.setOnClickListener{
-            deleteTask(position)
+            listener.deleteTask(item)
         }
         holder.checkBox.setOnClickListener{
             this.listener.checkBox(position)
@@ -47,8 +47,13 @@ class TaskAdapter(private val data: List<Task>, private val act : MainActivity):
         val checkBox: CheckBox = view.findViewById(R.id.checkbox)
     }
 
+    /*
+
     fun deleteTask(position: Int)
     {
         act.deleteTask(position)
     }
+
+
+    */
 }
