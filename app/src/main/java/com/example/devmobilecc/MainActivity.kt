@@ -13,9 +13,8 @@ import java.lang.reflect.Type
 class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
     private lateinit var recycler: RecyclerView
     private lateinit var addButton: FloatingActionButton
-    private lateinit var data: ArrayList<Task>
+    private  var data: ArrayList<Task> = ArrayList<Task>()
     private lateinit var adapter: TaskAdapter
-    private var viewModel: ViewModel = ViewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +52,6 @@ class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
 
     override fun onStop() {
         super.onStop()
-
         saveTasks(data)
     }
 
@@ -62,17 +60,17 @@ class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
         var t = Task("", false)
         data.add(t)
         adapter = TaskAdapter(data, this)
-        recycler.adapter = adapter
+        recycler.adapter = TaskAdapter(data, this)
 
     }
 
     fun getStoredTasks(): ArrayList<Task> {
         val preferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        val TasksStr = preferences.getString("Tasks", "")
+        val TasksStr = preferences.getString("tasks", "")
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<Task?>?>() {}.type
         try {
-            return gson.fromJson<Any>(TasksStr, type) as ArrayList<Task>
+            return gson.fromJson<ArrayList<Task>>(TasksStr, type) as ArrayList<Task>
         } catch (e: NullPointerException) { return ArrayList<Task>() }
     }
 
@@ -85,39 +83,29 @@ class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
         val type: Type = object : TypeToken<ArrayList<Task?>?>() {}.type
         var tasksList = ArrayList<Task>()
         try {
-            tasksList = gson.fromJson<Any>(TasksStr, type) as ArrayList<Task>
+            tasksList = gson.fromJson<ArrayList<Task>>(TasksStr, type) as ArrayList<Task>
         } catch (e: NullPointerException) { e.printStackTrace() }
         tasksList.addAll(tasks)
         editor.putString("tasks", gson.toJson(tasks))
         editor.apply()
     }
 
-    override fun deleteTask(Task: Task) {
+    override fun deleteTask(task: Task) {
         val preferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val TasksStr = preferences.getString("tasks", "")
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<Task?>?>() {}.type
-        var tasks = ArrayList<Task>()
+        var tasks: ArrayList<Task>
         try {
-            tasks = gson.fromJson<Any>(TasksStr, type) as ArrayList<Task>
-            tasks.remove(Task)
+            tasks = gson.fromJson<ArrayList<Task>>(TasksStr, type) as ArrayList<Task>
+            tasks.remove(task)
             editor.putString("tasks", gson.toJson(tasks))
             editor.apply()
+            this.data.remove(task)
+            this.adapter = TaskAdapter(data, this)
+            this.recycler.adapter = TaskAdapter(data, this)
         } catch (e: NullPointerException) { e.printStackTrace() }
     }
 
-    fun clearPreferences(){
-        val preferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        val editor = preferences.edit().clear()
-        editor.commit()
-    }
-
-    /*
-    fun deleteTask(position: Int){
-        data.removeAt(position)
-        adapter = TaskAdapter(data, this)
-        recycler.adapter = adapter
-    }
-     */
 }

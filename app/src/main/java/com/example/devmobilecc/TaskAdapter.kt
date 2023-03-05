@@ -38,19 +38,10 @@ class TaskAdapter(private val data: List<Task>, private val act : MainActivity):
     }
 
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val editTask: EditText = view.findViewById(R.id.edit_name)
         val deleteButton: ImageButton = view.findViewById(R.id.ic_close)
         val checkBox: CheckBox = view.findViewById(R.id.checkbox)
     }
 
-    /*
-
-    fun deleteTask(position: Int)
-    {
-        act.deleteTask(position)
-    }
-
-
-    */
 }
