@@ -1,6 +1,4 @@
-package com.example.devmobilecc.presentation
-
-import com.example.devmobilecc.data.Task
+package com.example.devmobilecc
 
 interface ITaskListener {
 

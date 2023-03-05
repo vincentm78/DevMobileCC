@@ -1,8 +1,7 @@
-package com.example.devmobilecc.domain
+package com.example.devmobilecc
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.example.devmobilecc.data.Task
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -10,7 +9,7 @@ import java.lang.reflect.Type
 class Repository {
 
     private val LIST_KEY = "list_key"
-    /*
+
     fun getStoredTasks(context: Context): ArrayList<Task> {
         val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val TasksStr = preferences.getString("Tasks", "")
@@ -22,20 +21,20 @@ class Repository {
     }
 
 
-    fun saveTask(context: Context, Task: Task) {
+    fun saveTasks(context: Context, tasks: ArrayList<Task>) {
         val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        val TasksStr = preferences.getString("Tasks", "")
+        val TasksStr = preferences.getString("tasks", "")
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<Task?>?>() {}.type
-        var Tasks = ArrayList<Task>()
+        var tasksList = ArrayList<Task>()
         try {
-            Tasks = gson.fromJson<Any>(TasksStr, type) as ArrayList<Task>
+            tasksList = gson.fromJson<Any>(TasksStr, type) as ArrayList<Task>
         } catch (e: NullPointerException) { e.printStackTrace() }
-        Tasks.add(Task)
-        editor.putString("Tasks", gson.toJson(Tasks))
+        tasksList.addAll(tasks)
+        editor.putString("tasks", gson.toJson(tasks))
         editor.apply()
-    } */
+    }
 
     fun deleteTask(context: Context, Task: Task) {
         val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
@@ -52,7 +51,7 @@ class Repository {
         } catch (e: NullPointerException) { e.printStackTrace() }
     }
 
-    /*
+
     fun storeTask(context: Context, task: Task){
         val preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = preferences.edit()
@@ -69,7 +68,7 @@ class Repository {
 
     }
 
-     */
+
 
     fun writeListinPref(context: Context, list: ArrayList<Task>) {
         val gson = Gson()

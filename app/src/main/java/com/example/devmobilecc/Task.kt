@@ -1,4 +1,4 @@
-package com.example.devmobilecc.data
+package com.example.devmobilecc
 
 
 data class Task (

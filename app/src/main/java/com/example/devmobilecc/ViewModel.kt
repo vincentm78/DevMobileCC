@@ -1,8 +1,6 @@
-package com.example.devmobilecc.presentation
+package com.example.devmobilecc
 
 import android.content.Context
-import com.example.devmobilecc.data.Task
-import com.example.devmobilecc.domain.Repository
 
 class ViewModel {
 
@@ -12,25 +10,25 @@ class ViewModel {
     fun clearPreferences(context:Context){
         return repository.clearPreferences(context)
     }
-/*
-    fun storeTask(context: Context, task:Task){
-        repository.storeTask(context, task)
+
+    fun saveTasks(context: Context, tasks: ArrayList<Task>){
+        repository.saveTasks(context, tasks)
         listener.refreshData(repository.getStoredTasks(context))
     }
-*/
+
     fun writeListinPref(context: Context, tasks:ArrayList<Task>){
         repository.writeListinPref(context, tasks)
-        listener.refreshData(repository.readListFromPref(context))
+        listener.refreshData(repository.getStoredTasks(context))
     }
 
 
     fun deleteTask(context: Context, task: Task){
         repository.deleteTask(context, task)
-        listener.refreshData(repository.readListFromPref(context))
+        listener.refreshData(repository.getStoredTasks(context))
     }
 
     fun getStoredTasks(context: Context): ArrayList<Task> {
-        return this.repository.readListFromPref(context)
+        return this.repository.getStoredTasks(context)
     }
 
 }

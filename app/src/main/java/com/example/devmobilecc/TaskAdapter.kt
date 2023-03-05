@@ -1,4 +1,4 @@
-package com.example.devmobilecc.presentation
+package com.example.devmobilecc
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,11 +6,8 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.example.devmobilecc.R
-import com.example.devmobilecc.data.Task
 
 class TaskAdapter(private val data: List<Task>, private val act : MainActivity): RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
 
@@ -22,7 +19,7 @@ class TaskAdapter(private val data: List<Task>, private val act : MainActivity):
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data.get(position)
+        val item = data[position]
         holder.checkBox.isChecked = item.cocher
         holder.editTask.setText(item.description)
         holder.deleteButton.setOnClickListener{
