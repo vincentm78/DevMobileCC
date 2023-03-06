@@ -10,7 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
+class MainActivity : AppCompatActivity(), ITaskListener {
     private lateinit var recycler: RecyclerView
     private lateinit var addButton: FloatingActionButton
     private  var data: ArrayList<Task> = ArrayList<Task>()
@@ -32,13 +32,6 @@ class MainActivity : AppCompatActivity(), ITaskListener, IRefreshData {
             this.createTask()
         }
 
-    }
-
-
-    override fun refreshData(data: List<Task>) {
-        this.data.clear()
-        this.data.addAll(data)
-        this.adapter.notifyDataSetChanged()
     }
 
     override fun checkBox(pos: Int) {
